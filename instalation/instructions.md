@@ -1,6 +1,6 @@
 ## Install Nix and Setup cache 
 
-- install nix with: `curl -L https://nixos.org/nix/install | sh`
+- install nix with: `curl -L https://nixos.org/nix/install | sh` (you need `sudo`)
     - Note: Some people experience problems with multi-user instalation. Try [single-user](https://nixos.org/manual/nix/stable/#sect-single-user-installation) if you run into troubles. Make sure you create `/nix` with permission `chown <youruser> /nix`
 - Once installed, edit `/etc/nix/nix.conf` file and add the following lines (always check the [original repo](https://github.com/input-output-hk/plutus#how-to-set-up-the-iohk-binary-caches****))
 
