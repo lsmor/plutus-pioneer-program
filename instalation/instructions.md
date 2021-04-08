@@ -19,9 +19,8 @@ Now we are going build everything for the backend and generate the needed javasc
 # This command output is something like "build 1/17 ..."
 [~/plutus] nix build -f default.nix plutus.haskell.packages.plutus-core.components.library
 
-# I think these are redundant, but I've executed just trying different things
 [~/plutus] nix-build -A plutus-playground.client
-[~/plutus] nix-build -A plutus-playground.server   # <<< This command is outdated in the repo
+[~/plutus] nix-build -A plutus-playground.server   # <<< This command is outdated in the original repo
 [~/plutus] nix-build -A plutus-playground.generate-purescript
 [~/plutus] nix-build -A plutus-playground.start-backend
 [~/plutus] nix-build -A plutus-pab
@@ -29,7 +28,6 @@ Now we are going build everything for the backend and generate the needed javasc
 # This opens a nix shell with previous builts available. First time it copies many things.
 [~/plutus] nix-shell
 
-# Again, I think this is redundant.
 [nix-shell: ~/plutus] cd plutus-pab
 [nix-shell: ~/plutus/plutus-pab] plutus-pab-generate-purs # En line of output message is "Done: generated"
 
