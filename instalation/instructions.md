@@ -1,7 +1,14 @@
 ## Install Nix and Setup cache 
 
-- install nix with: `curl -L https://nixos.org/nix/install | sh` (you need `sudo`)
-    - Note: Some people experience problems with multi-user instalation. Try [single-user](https://nixos.org/manual/nix/stable/#sect-single-user-installation) if you run into troubles. Make sure you create `/nix` with permission `chown <youruser> /nix`
+- install nix with: `curl -L https://nixos.org/nix/install | sh` (probably better `sudo curl -L https://nixos.org/nix/install | sh`)
+    - Note2: Some people experience problems with multi-user instalation. Try [single-user](https://nixos.org/manual/nix/stable/#sect-single-user-installation) if you run into troubles. Make sure you create `/nix` with permission `chown <youruser> /nix`
+- Notice that the output of nix instalation awares you to set enviroment variables, and display a command you **must** execute. It looks like this:
+```bash
+Installation finished!  To ensure that the necessary environment
+variables are set, either log in again, or type
+
+  . /home/<youruser>/.nix-profile/etc/profile.d/nix.sh ## Type this in your console, and ensure your ~/.profile has a nix-related path
+```
 - Once installed, edit `/etc/nix/nix.conf` file and add the following lines (always check the [original repo](https://github.com/input-output-hk/plutus#how-to-set-up-the-iohk-binary-caches****))
 
 ```bash
