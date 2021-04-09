@@ -10,7 +10,7 @@ variables are set, either log in again, or type
   . /home/<youruser>/.nix-profile/etc/profile.d/nix.sh ## Type this in your console, and ensure your ~/.profile has a nix-related path
 ```
 - Be sure your $PATH contains nix-related bin. This could be different in each system. Mine looks `/home/luis/.nix-profile/bin`. Apparently, debian users have problems with this.
-- Once installed, edit `/etc/nix/nix.conf` file and add the following lines (always check the [original repo](https://github.com/input-output-hk/plutus#how-to-set-up-the-iohk-binary-caches****))
+- Once installed, edit `/etc/nix/nix.conf` (create it if you don't have it) file and add the following lines (always check the [original repo](https://github.com/input-output-hk/plutus#how-to-set-up-the-iohk-binary-caches****))
 
 ```bash
 substituters = https://hydra.iohk.io https://iohk.cachix.org https://cache.nixos.org/
