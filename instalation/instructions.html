@@ -12,7 +12,7 @@
 <a class="sourceLine" id="cb1-4" title="4">  <span class="bu">.</span> <span class="ex">/home</span>/<span class="op">&lt;</span><span class="ex">youruser</span><span class="op">&gt;</span>/.nix-profile/etc/profile.d/nix.sh <span class="co">## Type this in your console, and ensure your ~/.profile has a nix-related path</span></a></code></pre></div>
 <ul>
 <li>Be sure your $PATH contains nix-related bin. This could be different in each system. Mine looks <code>/home/luis/.nix-profile/bin</code>. Apparently, debian users have problems with this.</li>
-<li>Once installed, edit <code>/etc/nix/nix.conf</code> file and add the following lines (always check the <a href="https://github.com/input-output-hk/plutus#how-to-set-up-the-iohk-binary-caches****">original repo</a>)</li>
+<li>Once installed, edit <code>/etc/nix/nix.conf</code> (create it if you don’t have it) file and add the following lines (always check the <a href="https://github.com/input-output-hk/plutus#how-to-set-up-the-iohk-binary-caches****">original repo</a>)</li>
 </ul>
 <div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb2-1" title="1"><span class="ex">substituters</span> = https://hydra.iohk.io https://iohk.cachix.org https://cache.nixos.org/</a>
 <a class="sourceLine" id="cb2-2" title="2"><span class="ex">trusted-public-keys</span> = hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ= iohk.cachix.org-1:DpRUyj7h7V830dp/i6Nti+NEO2/nhblbov/8MW7Rqoo= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=</a></code></pre></div>
