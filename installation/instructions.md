@@ -40,11 +40,11 @@ Now we are going build everything for the backend and generate the needed javasc
 [~/plutus] nix-build -A plutus-playground.start-backend
 [~/plutus] nix-build -A plutus-pab
 
-# This opens a nix shell with previous builts available. First time it copies many things.
+# This opens a nix shell with previous builds available. First time it copies many things.
 [~/plutus] nix-shell
 
 [nix-shell: ~/plutus] cd plutus-pab
-[nix-shell: ~/plutus/plutus-pab] plutus-pab-generate-purs # En line of output message is "Done: generated"
+[nix-shell: ~/plutus/plutus-pab] plutus-pab-generate-purs # End line of output message is "Done: generated"
 
 [nix-shell: ~/plutus/plutus-pab] cd ..
 [nix-shell: ~/plutus] cd plutus-playground-server
@@ -61,7 +61,7 @@ Warning: JWT_SIGNATURE not set
 Interpreter ready
 ```
 
-Let this running an open ANOTHER console
+Leave this running an open ANOTHER console
 
 ## Build the front-end
 
