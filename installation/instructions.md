@@ -109,7 +109,7 @@ Now your app is running at `https://localhost:8009/`
 
 ## (Optional) Plutus Documentation
 
-Documentation is build automatically (I think). You shoud see a symbolic link in `~/plutus` which looks like:
+Documentation is built automatically (I think). You shoud see a symbolic link in `~/plutus` which looks like:
 
 ```bash
 # the documentation folder includes the word haddock    -|
