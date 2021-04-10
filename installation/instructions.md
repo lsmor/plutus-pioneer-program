@@ -40,7 +40,7 @@ Now we are going build everything for the backend and generate the needed javasc
 [~/plutus] nix-build -A plutus-playground.start-backend
 [~/plutus] nix-build -A plutus-pab
 
-# This opens a nix shell with previous builds available. First time it copies many things.
+# This opens a nix shell with previous builds available. WARNING!! First time, it takes a while: read the note at the end of the section..
 [~/plutus] nix-shell
 
 [nix-shell: ~/plutus] cd plutus-pab
@@ -60,8 +60,38 @@ Warning: GITHUB_CLIENT_SECRET not set
 Warning: JWT_SIGNATURE not set
 Interpreter ready
 ```
-
 Leave this running an open ANOTHER console
+
+> first time you execute `nix-shell` It takes long. Some users have experienced really really long execution time, hence don't panic if it seems hanging, just let it work. The output is similar to the following:
+> ```
+> [~/plutus] nix-shell
+> 
+> trace: To materialize project.plan-nix for Agda entirely
+> copying path '/nix/store/181ikn3j5j069ly2acikyzwhi77s4vcj-01-index.tar.gz-at-2021-02-24T000000Z' W
+> copying path '/nix/store/4d4wf7mgplwf5jlyq1wnv905wfwrj660-cabal-install-exe-cabal-3.2.0.0' 
+>
+> .
+> . # loooong output
+> . 
+>
+> In order, the following would be built (use -v for more details):
+>  - STMonadTrans-0.4.5 (lib) (requires download & build)
+>  - alex-3.2.6 (exe:alex) (requires download & build)
+>
+> .
+> . # loooonger outputW
+> . 
+>
+> building '/nix/store/5aa81g4fib06gfb0rwmqgg8zn6l339jg-update-metadata-samples.drv'...
+> building '/nix/store/1bkd0rsfhm1pn5g043v0i07jc5kb3jbc-updateMaterialized.drv'...
+> nix-pre-commit-hooks: updating /home/<USERNAME>/Cardano/plutus-git repo
+> pre-commit installed at .git/hooks/pre-commit
+> pid 292692's current affinity list: 0-3
+> pid 292692's new affinity list: 0-3
+> 
+> [nix-shell: ~/plutus] 
+> ```
+
 
 ## Build the front-end
 
