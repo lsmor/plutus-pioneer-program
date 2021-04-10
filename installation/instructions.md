@@ -105,3 +105,25 @@ In other console run
 ```
 
 Now your app is running at `https://localhost:8009/`
+
+
+## (Optional) Plutus Documentation
+
+Documentation is build automatically (I think). You shoud see a symbolic link in `~/plutus` which looks like:
+
+```bash
+# the documentation folder includes the word haddock    -|
+result -> /nix/store/p9zqm03qmc7p5p1vfdbl06xysm85ir4f-haddock-join/
+```
+
+If this folder isn't in under `~/plutus` you can build it with 
+
+```bash
+[~/plutus] nix-build -A plutus-playground.haddock
+```
+
+You can see the plutus documentation in your regular browser. for example:
+
+```
+brave-browser ~/plutus/result/share/doc/index.html
+```

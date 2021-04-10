@@ -32,7 +32,7 @@
 <a class="sourceLine" id="cb4-10" title="10">[<span class="ex">~</span>/<span class="ex">plutus</span>] nix-build -A plutus-playground.start-backend</a>
 <a class="sourceLine" id="cb4-11" title="11">[<span class="ex">~</span>/<span class="ex">plutus</span>] nix-build -A plutus-pab</a>
 <a class="sourceLine" id="cb4-12" title="12"></a>
-<a class="sourceLine" id="cb4-13" title="13"><span class="co"># This opens a nix shell with previous builds available. First time it copies many things.</span></a>
+<a class="sourceLine" id="cb4-13" title="13"><span class="co"># This opens a nix shell with previous builds available. </span><span class="al">WARNING</span><span class="co">!! First time, it takes a while: read the note at the end of the section..</span></a>
 <a class="sourceLine" id="cb4-14" title="14">[<span class="ex">~</span>/<span class="ex">plutus</span>] nix-shell</a>
 <a class="sourceLine" id="cb4-15" title="15"></a>
 <a class="sourceLine" id="cb4-16" title="16">[<span class="ex">nix-shell</span>: ~/plutus] cd plutus-pab</a>
@@ -52,10 +52,47 @@
 <a class="sourceLine" id="cb4-30" title="30"><span class="ex">Warning</span>: JWT_SIGNATURE not set</a>
 <a class="sourceLine" id="cb4-31" title="31"><span class="ex">Interpreter</span> ready</a></code></pre></div>
 <p>Leave this running an open ANOTHER console</p>
+<blockquote>
+<p>first time you execute <code>nix-shell</code> It takes long. Some users have experienced really really long execution time, hence don’t panic if it seems hanging, just let it work. The output is similar to the following:</p>
+<pre><code>[~/plutus] nix-shell
+
+trace: To materialize project.plan-nix for Agda entirely
+copying path &#39;/nix/store/181ikn3j5j069ly2acikyzwhi77s4vcj-01-index.tar.gz-at-2021-02-24T000000Z&#39; W
+copying path &#39;/nix/store/4d4wf7mgplwf5jlyq1wnv905wfwrj660-cabal-install-exe-cabal-3.2.0.0&#39; 
+
+.
+. # loooong output
+. 
+
+In order, the following would be built (use -v for more details):
+ - STMonadTrans-0.4.5 (lib) (requires download &amp; build)
+ - alex-3.2.6 (exe:alex) (requires download &amp; build)
+
+.
+. # loooonger outputW
+. 
+
+building &#39;/nix/store/5aa81g4fib06gfb0rwmqgg8zn6l339jg-update-metadata-samples.drv&#39;...
+building &#39;/nix/store/1bkd0rsfhm1pn5g043v0i07jc5kb3jbc-updateMaterialized.drv&#39;...
+nix-pre-commit-hooks: updating /home/&lt;USERNAME&gt;/Cardano/plutus-git repo
+pre-commit installed at .git/hooks/pre-commit
+pid 292692&#39;s current affinity list: 0-3
+pid 292692&#39;s new affinity list: 0-3
+
+[nix-shell: ~/plutus] </code></pre>
+</blockquote>
 <h2 id="build-the-front-end">Build the front-end</h2>
 <p>In other console run</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb5-1" title="1">[<span class="ex">~</span>] <span class="bu">cd</span> plutus</a>
-<a class="sourceLine" id="cb5-2" title="2">[<span class="ex">~</span>/<span class="ex">plutus</span>] nix-shell</a>
-<a class="sourceLine" id="cb5-3" title="3">[<span class="ex">nix-shell</span>: ~/plutus/] cd plutus-playground-client</a>
-<a class="sourceLine" id="cb5-4" title="4">[<span class="ex">nix-shell</span>: ~/plutus/plutus-playground-client] npm run start <span class="co"># This compiles the frontend. It should end in wdm｣: Compiled successfully.</span></a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb6-1" title="1">[<span class="ex">~</span>] <span class="bu">cd</span> plutus</a>
+<a class="sourceLine" id="cb6-2" title="2">[<span class="ex">~</span>/<span class="ex">plutus</span>] nix-shell</a>
+<a class="sourceLine" id="cb6-3" title="3">[<span class="ex">nix-shell</span>: ~/plutus/] cd plutus-playground-client</a>
+<a class="sourceLine" id="cb6-4" title="4">[<span class="ex">nix-shell</span>: ~/plutus/plutus-playground-client] npm run start <span class="co"># This compiles the frontend. It should end in wdm｣: Compiled successfully.</span></a></code></pre></div>
 <p>Now your app is running at <code>https://localhost:8009/</code></p>
+<h2 id="optional-plutus-documentation">(Optional) Plutus Documentation</h2>
+<p>Documentation is build automatically (I think). You shoud see a symbolic link in <code>~/plutus</code> which looks like:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb7-1" title="1"><span class="co"># the documentation folder includes the word haddock    -|</span></a>
+<a class="sourceLine" id="cb7-2" title="2"><span class="ex">result</span> -<span class="op">&gt;</span> /nix/store/p9zqm03qmc7p5p1vfdbl06xysm85ir4f-haddock-join/</a></code></pre></div>
+<p>If this folder isn’t in under <code>~/plutus</code> you can build it with</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb8-1" title="1">[<span class="ex">~</span>/<span class="ex">plutus</span>] nix-build -A plutus-playground.haddock</a></code></pre></div>
+<p>You can see the plutus documentation in your regular browser. for example:</p>
+<pre><code>brave-browser ~/plutus/result/share/doc/index.html</code></pre>
