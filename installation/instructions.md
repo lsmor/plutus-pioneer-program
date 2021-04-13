@@ -192,3 +192,42 @@ You can see the plutus documentation in your regular browser. for example:
 ```
 brave-browser ~/plutus/result/share/doc/index.html
 ```
+
+
+## Miscellaneous
+
+### Completely uninstalling Nix
+
+Nix (unfortunately) installs with a non-distro-specific and not-reversible
+method and so requires careful unistallation if you don't want it any longer.
+The Nix documentation says simply removing `/nix` is the way but this leaves a
+lot of unneeded files on your system. We can clean this up properly.
+
+These instructions work equally well for single- or multi-user Nix.
+
+First, disable and stop the systemd units if they exist. This is harmless to
+do if they don't exist.
+
+```bash
+[~]$ sudo systemctl disable --now nix-daemon.service
+[~]$ sudo systemctl disable --now nix-daemon.socket
+```
+
+Then delete the many directories and files that are on the system
+
+```bash
+[~]$ rm -rf $HOME/{.nix-*,.cache/nix,.config/nix}
+[~]$ sudo rm -rf /root/{.nix-channels,.nix-defexpr,.nix-profile,.config/nixpkgs,.cache/nix}
+[~]$ sudo rm -rf /etc/{nix,profile.d/nix.sh*}
+[~]$ sudo rm -rf /nix
+```
+
+Now we will remove the 32(!) `nixbld` users that were added to the system for a
+multi-user installation.
+
+```bash
+[~]$ sudo sh -c 'for N in $(seq 32); do deluser "nixbld$N"; done'
+```
+
+Finally, if you see one, remove the line that was added to your
+`$HOME/.bash_profile` or `$HOME/.profile` to source the nix environment.
