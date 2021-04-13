@@ -222,5 +222,12 @@ Then delete the many directories and files that are on the system
 [~]$ sudo rm -rf /nix
 ```
 
-Finally remove the line that was added to your `$HOME/.bash_profile` or
-`$HOME/.profile` to source the nix environment.
+Now we will remove the 32(!) `nixbld` users that were added to the system for a
+multi-user installation.
+
+```bash
+[~]$ sudo sh -c 'for N in $(seq 32); do deluser "nixbld$N"; done'
+```
+
+Finally, if you see one, remove the line that was added to your
+`$HOME/.bash_profile` or `$HOME/.profile` to source the nix environment.
