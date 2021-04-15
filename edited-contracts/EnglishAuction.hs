@@ -260,7 +260,7 @@ bid BidParams{..} = do
     (oref, o, d@AuctionDatum{..}) <- findAuction bpCurrency bpToken
     logInfo @String $ printf "found auction utxo with datum %s" (show d)
 
-    -- Replace throwError by logError, so the wallet doesn't get "banned" from the contract
+    -- Replace throwError by logError + if then else, so the wallet doesn't get "banned" from the contract
     if (bpBid < minBid d)
       then logError $ pack $ printf "bid lower than minimal bid %d" (minBid d)
       else do
