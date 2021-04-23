@@ -1,27 +1,92 @@
-## Install Nix and Setup cache 
+## Install Nix and set up cache
 
-- install nix with: `curl -L https://nixos.org/nix/install | sh` (probably better `sudo curl -L https://nixos.org/nix/install | sh`)
-    - Note2: Some people experience problems with multi-user instalation. Try [single-user](https://nixos.org/manual/nix/stable/#sect-single-user-installation) if you run into troubles. Make sure you create `/nix` with permission `chown <youruser> /nix`
-- Notice that the output of nix instalation awares you to set enviroment variables, and display a command you **must** execute. It looks like this:
+Nix can be installed single-user or multi-user
+
+More detailed info can be found in the
+[Nix Package Manager Guide](https://nixos.org/manual/nix/stable)
+
+
+### single-user
+
+Single-user Nix installation has advantages. 1) No daemon and socket are
+created, 2) a group of a dozen or so nix users doesn't get created on the
+system, 3) nothing is written into `/etc`
+
+Install nix
+
+```bash
+[~]$ sh <(curl -L https://nixos.org/nix/install) --no-daemon
+```
+
+The installer should create the `/nix` directory for you with the proper
+permissions. When it's done you will see
+
 ```bash
 Installation finished!  To ensure that the necessary environment
 variables are set, either log in again, or type
 
-  . /home/<youruser>/.nix-profile/etc/profile.d/nix.sh ## Type this in your console, and ensure your ~/.profile has a nix-related path
+  . /home/<youruser>/.nix-profile/etc/profile.d/nix.sh
 ```
-- Be sure your $PATH contains nix-related bin. This could be different in each system. Mine looks `/home/luis/.nix-profile/bin`. Apparently, debian users have problems with this.
-- Once installed, edit `/etc/nix/nix.conf` (create it if you don't have it) file and add the following lines (always check the [original repo](https://github.com/input-output-hk/plutus#how-to-set-up-the-iohk-binary-caches****))
+
+Execute the above command now to set the environment in this shell (also
+logout/login will achieve this)
+
+Make sure the changes the installer just made to your `~/.bash_profile` or
+`~/.profile` make sense.
+
+Next we will add IOG's caches to Nix to speed up our development significantly
+by using their build artifacts. This is very important and means the difference
+between 3+ hours and less than 10 minutes!
 
 ```bash
-substituters = https://hydra.iohk.io https://iohk.cachix.org https://cache.nixos.org/
-trusted-public-keys = hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ= iohk.cachix.org-1:DpRUyj7h7V830dp/i6Nti+NEO2/nhblbov/8MW7Rqoo= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
+[~]$ mkdir ~/.config/nix
+[~]$ echo 'substituters = https://hydra.iohk.io https://iohk.cachix.org https://cache.nixos.org/' >> ~/.config/nix/nix.conf
+[~]$ echo 'trusted-public-keys = hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ= iohk.cachix.org-1:DpRUyj7h7V830dp/i6Nti+NEO2/nhblbov/8MW7Rqoo= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=' >> ~/.config/nix/nix.conf
 ```
 
-If running multi-user, after editing `nix.conf`, restart the daemon
+
+### multi-user
+
+If you decide you'd like to go with multi-user Nix, read on.
+
+The multi-user installer requires `rsync`
 
 ```bash
-[~] sudo systemctl restart nix-daemon.service  # On distros that use systemd
+[~]$ which rsync || sudo sh -c 'apt update ; apt install rsync'  # For Ubuntu and other Debian-based distros
 ```
+
+Install nix
+
+```bash
+[~]$ sh <(curl -L https://nixos.org/nix/install) --daemon
+```
+
+This will run a wizard, prompting you for some things. When it's done we need
+to set the environment in this shell (also logout/login will also achieve this)
+
+```bash
+[~]$ . /etc/profile.d/nix.sh
+```
+
+Next we will add IOG's caches to Nix to speed up our development significantly
+by using their build artifacts. This is very important and means the difference
+between 3+ hours and less than 10 minutes!
+
+```bash
+[~]$ sudo sh -c "echo 'substituters = https://hydra.iohk.io https://iohk.cachix.org https://cache.nixos.org/' >> /etc/nix/nix.conf"
+[~]$ sudo sh -c "echo 'trusted-public-keys = hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ= iohk.cachix.org-1:DpRUyj7h7V830dp/i6Nti+NEO2/nhblbov/8MW7Rqoo= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=' >> /etc/nix/nix.conf"
+[~]$ sudo systemctl restart nix-daemon.service  # On Linux distros that use systemd, like Ubuntu and most Debians
+```
+
+### After either Nix installation method
+
+If everything worked you should be able to do this
+
+```bash
+[~]$ nix-env --version
+nix-env (Nix) 2.3.10
+```
+
 
 ## Build the backend
 
@@ -127,3 +192,42 @@ You can see the plutus documentation in your regular browser. for example:
 ```
 brave-browser ~/plutus/result/share/doc/index.html
 ```
+
+
+## Miscellaneous
+
+### Completely uninstalling Nix
+
+Nix (unfortunately) installs with a non-distro-specific and not-reversible
+method and so requires careful unistallation if you don't want it any longer.
+The Nix documentation says simply removing `/nix` is the way but this leaves a
+lot of unneeded files on your system. We can clean this up properly.
+
+These instructions work equally well for single- or multi-user Nix.
+
+First, disable and stop the systemd units if they exist. This is harmless to
+do if they don't exist.
+
+```bash
+[~]$ sudo systemctl disable --now nix-daemon.service
+[~]$ sudo systemctl disable --now nix-daemon.socket
+```
+
+Then delete the many directories and files that are on the system
+
+```bash
+[~]$ rm -rf $HOME/{.nix-*,.cache/nix,.config/nix}
+[~]$ sudo rm -rf /root/{.nix-channels,.nix-defexpr,.nix-profile,.config/nixpkgs,.cache/nix}
+[~]$ sudo rm -rf /etc/{nix,profile.d/nix.sh*}
+[~]$ sudo rm -rf /nix
+```
+
+Now we will remove the 32(!) `nixbld` users that were added to the system for a
+multi-user installation.
+
+```bash
+[~]$ sudo sh -c 'for N in $(seq 32); do deluser "nixbld$N"; done'
+```
+
+Finally, if you see one, remove the line that was added to your
+`$HOME/.bash_profile` or `$HOME/.profile` to source the nix environment.
