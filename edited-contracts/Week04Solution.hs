@@ -43,6 +43,8 @@ payContractHandle = do
 -- A trace that invokes the pay endpoint of payContract on Wallet 1 twice, each time with Wallet 2 as
 -- recipient, but with amounts given by the two arguments. There should be a delay of one slot
 -- after each endpoint call.
+
+-- Modified payTrace so it accept the contract in order to have both versions of the contract in scope (with and without error handler)
 payTrace :: Contract () PaySchema Text () -> Integer -> Integer -> EmulatorTrace ()
 payTrace c x y = do
     let w2 = Wallet 2
