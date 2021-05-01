@@ -36,7 +36,7 @@ payContractHandle :: Contract () PaySchema Text ()
 payContractHandle = do
     pp <- endpoint @"pay"
     let tx = mustPayToPubKey (ppRecipient pp) $ lovelaceValueOf $ ppLovelace pp
-        errorHandler = \t -> Contract.logInfo @Text ("Error cought!: " <> t)
+        errorHandler = \t -> Contract.logInfo @Text ("Error submiting the trasaction!: " <> t)
     errorHandler `handleError` void (submitTx tx)
     payContractHandle
 
