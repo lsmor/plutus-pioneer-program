@@ -17,6 +17,8 @@ import Ledger.Constraints         as Constraints
 import Plutus.Contract            as Contract
 import Plutus.Trace.Emulator      as Emulator
 import Wallet.Emulator.Wallet
+import Control.Monad (forever)
+
 
 data PayParams = PayParams
     { ppRecipient :: PubKeyHash
@@ -26,19 +28,18 @@ data PayParams = PayParams
 type PaySchema = BlockchainActions .\/ Endpoint "pay" PayParams
 
 payContract :: Contract () PaySchema Text ()
-payContract = do
+payContract = forever $ do
     pp <- endpoint @"pay"
     let tx = mustPayToPubKey (ppRecipient pp) $ lovelaceValueOf $ ppLovelace pp
     void $ submitTx tx
-    payContract
 
 payContractHandle :: Contract () PaySchema Text ()
-payContractHandle = do
+payContractHandle = forever $ do
     pp <- endpoint @"pay"
     let tx = mustPayToPubKey (ppRecipient pp) $ lovelaceValueOf $ ppLovelace pp
         errorHandler = \t -> Contract.logInfo @Text ("Error submiting the trasaction!: " <> t)
+    -- Notice that errors must be handle inside the contract! otherwise, error are detected only once.
     errorHandler `handleError` void (submitTx tx)
-    payContractHandle
 
 -- A trace that invokes the pay endpoint of payContract on Wallet 1 twice, each time with Wallet 2 as
 -- recipient, but with amounts given by the two arguments. There should be a delay of one slot
